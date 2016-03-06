@@ -1,14 +1,19 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 5-mar-2016, 18.28.16
-    Author     : Lasko
-*/
 .navbar-brand img {
   position: relative;
   bottom: 19px;
-  height: 60;
+  height: 50px;
   width: 90px; }
+
+@media (max-width: 767px) {
+  #myCarousel {
+    display: none; } }
+
+@media (max-width: 767px) {
+  .navbar-wrapper {
+    position: relative !important; } }
+
+.item {
+  width: auto;
+  height: auto; }
+  .item .carousel-caption h1, .item .carousel-caption p {
+    background-color: rgba(64, 64, 64, 0.5); }
