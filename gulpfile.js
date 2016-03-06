@@ -1,44 +1,60 @@
-// Include gulp
 var gulp = require('gulp'); 
 
-// Include Our Plugins
 var jshint = require('gulp-jshint');
 var sass = require('gulp-sass');
-var concat = require('gulp-concat');
+var cleanCSS = require('gulp-clean-css');
 var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 
-// Lint Task
 gulp.task('lint', function() {
     return gulp.src('public_html/source/javascript/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
-// Compile Our Sass
+//compila files sass
 gulp.task('sass', function() {
     return gulp.src('public_html/source/scss/*.scss')
         .pipe(sass())
+        .pipe(gulp.dest('public_html/source/css'));
+});
+
+//minimizza il css
+gulp.task('minify-css', function() {
+  return gulp.src('public_html/source/css/*.css')
+    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(gulp.dest('public_html/source/css/minified/'));
+});
+
+//concatena il css
+gulp.task('concat-css', function() {
+    return gulp.src('public_html/source/css/minified/*.css')
+        .pipe(concat('bundle.min.css'))
         .pipe(gulp.dest('public_html/assets/css'));
 });
 
-// Concatenate & Minify JS
-gulp.task('scripts', function() {
+//minimizza gli scripts
+gulp.task('uglify-scripts', function() {
     return gulp.src('public_html/source/javascript/*.js')
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest('public_html/source/javascript/bundle'))
-        .pipe(rename('bundle.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('public_html/assets/bundle'));
+        .pipe(gulp.dest('public_html/source/javascript/minified'));
+});
+
+//concatena gli scripts
+gulp.task('concat-scripts', function() {
+    return gulp.src('public_html/source/javascript/minified/*.js')
+        .pipe(concat('bundle.min.js'))
+        .pipe(gulp.dest('public_html/assets/javascript'));
 });
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('public_html/source/javascript/*.js', ['lint', 'scripts']);
-    gulp.watch('public_html/source/scss/*.scss', ['sass']);
+    gulp.watch('public_html/source/javascript/*.js', ['lint', 'uglify-scripts', 'concat-scripts']);
+    gulp.watch('public_html/source/scss/*.scss', ['sass', 'minify-css', 'concat-css']);
 });
 
 // Default Task
-gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+gulp.task('default', ['lint', 'sass', 'minify-css', 'concat-css', 'uglify-scripts', 'concat-scripts', 'watch']);
 // Default Task
-gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+gulp.task('default', ['lint', 'sass', 'minify-css', 'concat-css', 'uglify-scripts', 'concat-scripts', 'watch']);

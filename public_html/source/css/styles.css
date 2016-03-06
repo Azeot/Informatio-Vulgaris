@@ -7,3 +7,8 @@ and open the template in the editor.
     Created on : 5-mar-2016, 18.28.16
     Author     : Lasko
 */
+.navbar-brand img {
+  position: relative;
+  bottom: 19px;
+  height: 60;
+  width: 90px; }
